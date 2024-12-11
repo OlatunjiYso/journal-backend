@@ -1,5 +1,5 @@
 import { connection } from "../connection";
-import { selectPostsTemplate } from "./query-tamplates";
+import { selectPostsTemplate, addPostTemplate, deletePostByIdTemplate } from "./query-tamplates";
 import { Post } from "./types";
 
 export const getPosts = (userId: string): Promise<Post[]> =>
@@ -11,3 +11,26 @@ export const getPosts = (userId: string): Promise<Post[]> =>
       resolve(results as Post[]);
     });
   });
+
+  export const addPost = (post: Post): Promise<void> => 
+    new Promise((resolve, reject)=> {
+      const {id, user_id, title, body, created_at } = post;
+      connection.run(addPostTemplate, [id, user_id, title, body, created_at], (error:any) => {
+        if (error) {
+          reject(error);
+        }
+        resolve();
+      })
+    });
+
+    export const deletePostById = (id: string): Promise<void> => {
+      return new Promise((resolve, reject) => {
+        connection.run(deletePostByIdTemplate, [id], (error) => {
+          if (error) {
+            return reject(error);
+          }
+          resolve();
+        });
+      });
+    };
+    

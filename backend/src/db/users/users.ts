@@ -3,6 +3,7 @@ import { connection } from "../connection";
 import {
   selectCountOfUsersTemplate,
   selectUsersTemplate,
+  selectUserByIdTemplate
 } from "./query-templates";
 import { User } from "./types";
 
@@ -18,6 +19,20 @@ export const getUsersCount = (): Promise<number> =>
       }
     );
   });
+
+export const getUserById = (id: string): Promise<User> => 
+  new Promise((resolve, reject)=> {
+    connection.get<User>(
+      selectUserByIdTemplate,
+      [id],
+      (error, results) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(results);
+      }
+    );
+  })
 
 export const getUsers = (
   pageNumber: number,

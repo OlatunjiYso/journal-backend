@@ -13,7 +13,8 @@ router.get("/", async (req: Request, res: Response) => {
   }
 
   const users = await getUsers(pageNumber, pageSize);
-  res.send(users);
+  const count = await getUsersCount();
+  res.send({users, total: count });
 });
 
 router.get("/count", async (req: Request, res: Response) => {
